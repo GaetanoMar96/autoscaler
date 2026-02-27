@@ -17,9 +17,10 @@ limitations under the License.
 package integration
 
 import (
+	"time"
+
 	"k8s.io/autoscaler/cluster-autoscaler/config"
 	"k8s.io/autoscaler/cluster-autoscaler/estimator"
-	"time"
 )
 
 // DefaultAutoscalingOptions provides the baseline configuration for all tests.
@@ -96,6 +97,13 @@ func WithCloudProviderName(name string) AutoscalingOptionOverride {
 	}
 }
 
+// WithMaxNodeGroupBinpackingDuration sets the maximum ng binpacking duration.
+func WithMaxNodeGroupBinpackingDuration(d time.Duration) AutoscalingOptionOverride {
+	return func(o *config.AutoscalingOptions) {
+		o.MaxNodeGroupBinpackingDuration = d
+	}
+}
+
 // WithScaleDownUnneededTime sets the scale down unneeded time option.
 func WithScaleDownUnneededTime(d time.Duration) AutoscalingOptionOverride {
 	return func(o *config.AutoscalingOptions) {
@@ -107,5 +115,12 @@ func WithScaleDownUnneededTime(d time.Duration) AutoscalingOptionOverride {
 func WithProvisioningRequestEnabled() AutoscalingOptionOverride {
 	return func(o *config.AutoscalingOptions) {
 		o.ProvisioningRequestEnabled = true
+	}
+}
+
+// WithMaxScaleDownParallelism sets the maximum scale down parallelism.
+func WithMaxScaleDownParallelism(sdp int) AutoscalingOptionOverride {
+	return func(o *config.AutoscalingOptions) {
+		o.MaxScaleDownParallelism = sdp
 	}
 }
